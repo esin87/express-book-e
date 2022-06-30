@@ -25,11 +25,30 @@ router.get('/:id', (req, res) => {
 			return res.json(bookmark);
 		}
 	});
-	// if (bookmark) {
-	// 	return res.json(bookmark);
-	// } else {
-	// 	return res.sendStatus(404);
-	// }
+});
+
+// localhost:8000/api/bookmarks
+// POST: Create route
+router.post('/', (req, res) => {
+	Bookmark.create(req.body, (err, bookmark) => {
+		if (err) {
+			// send back a response of 400 bad request
+			return res.sendStatus(400);
+		} else {
+			// send back 201 created status and the newly created bookmark
+			return res.status(201).json(bookmark);
+		}
+	});
+});
+
+// localhost:8000/api/bookmarks/:id
+// PUT: Update route
+router.put('/:id', async (req, res) => {
+	const bookmark = await Bookmark.findByIdAndUpdate(req.params.id, req.body, {
+		new: true,
+	});
+
+	return res.json(bookmark);
 });
 
 // Export this router object so that it is accessible when we require the file elsewhere
