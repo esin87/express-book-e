@@ -9,10 +9,12 @@ const Bookmark = require('../models/Bookmark');
 // GET: Index route
 router.get('/', (req, res) => {
 	// find all the bookmarks in the db
-	Bookmark.find({}).then((bookmarks) => {
-		// send them back as json
-		return res.json(bookmarks);
-	});
+	Bookmark.find({})
+		.populate('owner')
+		.then((bookmarks) => {
+			// send them back as json
+			return res.json(bookmarks);
+		});
 });
 
 // localhost:8000/api/bookmarks/:id

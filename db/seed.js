@@ -1,15 +1,20 @@
-// import Bookmark model
-const Bookmark = require('../models/Bookmark');
-// import bookmark seed data
-const bookmarks = require('./seeds.json');
+const mongoose = require('./connection');
 
-// create new bookmarks with the seed data
-Bookmark.insertMany(bookmarks)
-	.then((res) => {
-		// if successful, log the newly created bookmarks
-		console.log(res);
+const Bookmark = require('../models/Bookmark');
+const User = require('../models/User');
+const bookmarkseeds = require('./seeds.json');
+
+Bookmark.deleteMany({})
+	.then(() => User.deleteMany({}))
+	.then(() => {
+		return User.create({ email: 'fake@email.com', name: 'Fake Person' })
+			.then((user) =>
+				bookmarkseeds.map((bookmark) => ({ ...bookmark, owner: user._id }))
+			)
+			.then((bookmarks) => Bookmark.insertMany(bookmarks));
 	})
-	// if there's an error, log the error
-	.catch((err) => console.log(err))
-	// lastly, hang up the database connection
-	.finally(() => process.exit());
+	.then(console.log)
+	.catch(console.error)
+	.finally(() => {
+		process.exit();
+	});
