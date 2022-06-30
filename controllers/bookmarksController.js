@@ -51,5 +51,29 @@ router.put('/:id', async (req, res) => {
 	return res.json(bookmark);
 });
 
+// localhost:8000/api/bookmarks/:id
+// DELETE: Remove route
+router.delete('/:id', async (req, res, next) => {
+	try {
+		const deletedBookmark = await Bookmark.findByIdAndDelete(req.params.id);
+
+		return res.json(deletedBookmark);
+	} catch (error) {
+		next(error);
+	}
+
+	// An alternative syntax
+	// Bookmark.findByIdAndDelete(req.params.id, (err, bookmark) => {
+	// 	// handle any errors with finding the bookmark
+	// 	if (err) {
+	// 		return res.sendStatus(400);
+	// 	} else {
+	// 		// send back 204 no content
+	// 		// if you don't need to send back the deleted item
+	// 		return res.sendStatus(204);
+	// 	}
+	// });
+});
+
 // Export this router object so that it is accessible when we require the file elsewhere
 module.exports = router;
