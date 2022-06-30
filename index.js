@@ -27,6 +27,9 @@ app.get('/', (req, res) => {
 });
 
 /* START CONTROLLERS HERE */
+const bookmarksController = require('./controllers/bookmarksController');
+// delegate all requests to /api/bookmarks to the bookmark controller
+app.use('/api/bookmarks', bookmarksController);
 /* END CONTROLLERS HERE */
 
 //=============================================================================
