@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
 		} else {
 			return res.json(bookmark);
 		}
-	});
+	}).populate('owner');
 });
 
 // localhost:8000/api/bookmarks
